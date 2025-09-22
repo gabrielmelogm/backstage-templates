@@ -1,0 +1,27 @@
+import { Elysia } from "elysia";
+import os from "node:os";
+
+const app = new Elysia();
+
+app.get("/api/v1/info", () => {
+  return {
+    time: new Date(),
+    hostname: os.hostname(),
+    message: 'Hello from Elysia! 🦊',
+    deployedOn: 'kubernetes',
+    env: '${{values.app_env}}',
+    appName: '${{values.app_name}}'
+  };
+});
+
+app.get("/api/v1/healthz", () => {
+  return {
+    status: "ok",
+  };
+});
+
+app.listen(3000);
+
+console.log(
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
+);
